@@ -31,8 +31,12 @@ ARG API_COMMIT=default
 ENV API_COMMIT ${API_COMMIT:-default}
 
 # Scripts
-RUN chmod +x /app/scripts/build.sh && \
-    chmod +x /app/scripts/run.sh && \
+RUN chmod 777 ./scripts/build.sh && \
+    chmod 777 ./scripts/run.sh && \
+    ./scripts/build.sh
+
+RUN chmod 777 /app/scripts/build.sh && \
+    chmod 777 /app/scripts/run.sh && \
     /app/scripts/build.sh
 
 # Comando default executado no `docker run <image>`

@@ -32,6 +32,7 @@
     "reflect-metadata": "^0.1.9",
     "source-map-support": "^0.4.11",
     "tslint": "^5.5.0",
-    "typescript": "^2.4.1"
+    "typescript": "^2.4.1",
+    "mysql": "^2.13.0"
   }
 }

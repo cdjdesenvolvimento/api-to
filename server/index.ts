@@ -1,3 +1,4 @@
+
 import "reflect-metadata";
 
 import * as fs from "fs";
@@ -17,11 +18,14 @@ import { Container } from "./core/dependencies/container";
 import { ConfigService } from "./services/config/implementation";
 import { ConfigServiceId, IConfigService } from "./services/config/interface";
 
-import { DatabaseService } from "./services/database/implementation";
-import { DatabaseServiceId, IDatabaseService } from "./services/database/interface";
+import { DataBaseMySqlService } from "./services/database/implementation";
+import { DatabaseServiceId, IDataBaseMySqlService } from "./services/database/interface";
 
 import { LogService } from "./services/log/implementation";
 import { ILogService, LogServiceId } from "./services/log/interface";
+
+import { SampleServiceMysql } from './services/sample_service_mysql/implementation';
+import { SampleServiceMySqlId, ISampleServiceMySql } from './services/sample_service_mysql/interface';
 
 /**
  * Plugins
@@ -68,8 +72,9 @@ function bindServices() {
     Container.bind(Server).toConstantValue(new Server());
     Container.bind(ConfigServiceId).to(ConfigService).inSingletonScope();
     Container.bind(LogServiceId).to(LogService).inSingletonScope();
+    Container.bind(SampleServiceMySqlId).to(SampleServiceMysql).inSingletonScope();
     /* apito:services start */
-    Container.bind(DatabaseServiceId).to(DatabaseService).inSingletonScope();
+    Container.bind(DatabaseServiceId).to(DataBaseMySqlService).inSingletonScope();
     /* apito:services end */
 }
 
@@ -80,9 +85,11 @@ setImmediate(async function bootstrap() {
 
     let logger: ILogService = null;
     let config: IConfigService = null;
-    let database: IDatabaseService = null;
+    let database: IDataBaseMySqlService = null;
+    let sampleService: ISampleServiceMySql = null;
 
     try {
+
 
         bindServices();
 
@@ -95,8 +102,10 @@ setImmediate(async function bootstrap() {
         logger = Container.get<ILogService>(LogServiceId);
         logger.initialize();
 
+        sampleService = Container.get<ISampleServiceMySql>(SampleServiceMySqlId);
+
         /* apito:routers_init start */
-        database = Container.get<IDatabaseService>(DatabaseServiceId);
+        database = Container.get<IDataBaseMySqlService>(DatabaseServiceId);
         database.initialize();
         /* apito:routers_init end */
 

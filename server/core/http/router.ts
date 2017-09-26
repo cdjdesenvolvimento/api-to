@@ -1,6 +1,9 @@
+
+import { IDataBaseMySqlService, DatabaseServiceId } from './../../services/database/interface';
 import * as Boom from "boom";
 import * as hapi from "hapi";
 import * as decorators from "./decorators";
+import { Base } from './base';
 
 import { inject, injectable } from "inversify";
 
@@ -27,16 +30,20 @@ export interface IResponse extends hapi.Response {
 export const RouterId = Symbol("router");
 
 @injectable()
-export class Router implements IRouter {
+export class Router extends Base implements IRouter {
 
     @inject(LogServiceId)
     protected logger: ILogService;
+
+    @inject(DatabaseServiceId)
+    protected db: IDataBaseMySqlService;
 
     private routeName: string = "";
     private routePath: string = "";
     private handlers: any[] = [];
 
     constructor() {
+        super();
         this.routeName = Reflect.getMetadata(decorators.RouterName, this.constructor);
         this.routePath = Reflect.getMetadata(decorators.RouterPath, this.constructor).replace(/\/$/g, "");
         this.handlers = Reflect.getMetadata(decorators.RouteHandlers, this.constructor) as any[];
@@ -77,7 +84,7 @@ export class Router implements IRouter {
             const route: any = {
                 config: routeConfig || {},
                 // tslint:disable-next-line:object-literal-shorthand only-arrow-functions
-                handler: async function(request, response): Promise<any> {
+                handler: async function (request, response): Promise<any> {
                     const args = Array.prototype.slice.call(arguments);
                     try {
                         const data = await handler.apply(instance, args);

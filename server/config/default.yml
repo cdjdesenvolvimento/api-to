@@ -8,8 +8,10 @@ log:
   pretty: true
 
 database:
-  connection: postgres://postgres:postgres@postgres:5432/postgres
-  debug: true
+  host: mysql_pay
+  user: api
+  password: fXd7hdvo
+  database: pay_allfood
 
 this:
   is:

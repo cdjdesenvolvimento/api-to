@@ -1,14 +1,11 @@
-/**
- * Logging service
- */
-
-import * as knex from "knex";
 import { IService } from "../../core/dependencies/service";
+var mysql = require('mysql')
 
 export const DatabaseServiceId = Symbol("database");
 
-export interface IDatabaseService extends IService {
+export interface IDataBaseMySqlService  {
 
-    knex: knex;
-
+    initialize(): void;
+    query(sql, args) :  Promise<{}>
+    close():  Promise<{}>
 }

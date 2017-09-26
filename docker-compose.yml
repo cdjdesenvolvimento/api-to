@@ -1,12 +1,14 @@
 version: "3"
 services:
 
-  api:
+  pay:
     build: .
+    image: jsndev/api
+    container_name: api 
     links:
-      - postgres
+      - db
     depends_on:
-      - postgres
+      - db
     environment:
       NODE_ENV: development
     ports:
@@ -16,20 +18,29 @@ services:
       - ./scripts:/app/scripts
     entrypoint: "./node_modules/.bin/nodemon"
 
-  postgres:
-    image: postgres:9.6-alpine
+  db:
+    image: mysql
+    container_name: mysql_pay
     environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-
-  adminer:
-    image: adminer
-    links:
-      - postgres
-    depends_on:
-      - postgres
+      - MYSQL_DATABASE=pay_allfood
+      - MYSQL_USER=api
+      - MYSQL_PASSWORD=fXd7hdvo
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./db:/var/lib/mysql
     ports:
-      - 8080:8080
+      - "3306:3306"
+      
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: front_pay   
     environment:
-      ADMINER_DESIGN: pepa-linha
+      PMA_ARBITRARY: 1
+      MYSQL_USER: api
+      MYSQL_PASSWORD: fXd7hdvo
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "80:80"
+    links:
+      # for mysql container
+      - "db:db" 

@@ -7,7 +7,8 @@
         "**/.idea": true,
         "**/node_modules": true,
         "**/*.js": true,
-        "**/*.js.map": true
+        "**/*.js.map": true,
+        "**/db": true
     },
     "tslint.enable": true,
     "tslint.autoFixOnSave": true

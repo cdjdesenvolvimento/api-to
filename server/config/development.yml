@@ -1,0 +1,18 @@
+http:
+  host: 0.0.0.0
+  port: 4000
+
+log:
+  name: api
+  level: trace
+  pretty: true
+
+database:
+  host: mysql_pay
+  user: api
+  password: fXd7hdvo
+  database: pay_allfood
+
+this:
+  is:
+    something: Hi
