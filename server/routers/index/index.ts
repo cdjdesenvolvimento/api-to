@@ -59,26 +59,11 @@ export class IndexRouter extends Router {
 
     @post("/mysql")
     public async mysql(request: IRequest, response: IResponse): Promise<IPerson | IError> {
-
-        console.log(request.payload.teste);
-        
-        return this.sampleServiceMysql.sampleQuery("1").then((data) => {
+        return this.sampleServiceMysql.sampleQuery(request.payload.id).then((data) => {
             if (Object.keys(data).length > 0) {
-                return {
-                    status: true,
-                    message: "",
-                    data: {
-                        id: data[0].id,
-                        nome: data[0].sobrenome,
-                        sobrenome: data[0].sobrenome
-                    }
-                }
+                return this.signResult(data);
             } else {
-                return {
-                    status: false,
-                    message: "",
-                    data: {}
-                }
+                return this.notSingResult("Nenhum resultado encontrado para o id:"+request.payload.id);
             }
         })
     }

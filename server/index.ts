@@ -1,4 +1,3 @@
-
 import "reflect-metadata";
 
 import * as fs from "fs";
@@ -26,6 +25,9 @@ import { ILogService, LogServiceId } from "./services/log/interface";
 
 import { SampleServiceMysql } from './services/sample_service_mysql/implementation';
 import { SampleServiceMySqlId, ISampleServiceMySql } from './services/sample_service_mysql/interface';
+
+import { Base } from './base/implementations';
+import { BaseId, IBase } from './base/interface';
 
 /**
  * Plugins
@@ -70,6 +72,7 @@ function registerRouters() {
  */
 function bindServices() {
     Container.bind(Server).toConstantValue(new Server());
+    Container.bind(BaseId).to(Base).inSingletonScope();
     Container.bind(ConfigServiceId).to(ConfigService).inSingletonScope();
     Container.bind(LogServiceId).to(LogService).inSingletonScope();
     Container.bind(SampleServiceMySqlId).to(SampleServiceMysql).inSingletonScope();
@@ -83,6 +86,7 @@ function bindServices() {
  */
 setImmediate(async function bootstrap() {
 
+    let base : IBase = null;
     let logger: ILogService = null;
     let config: IConfigService = null;
     let database: IDataBaseMySqlService = null;
@@ -98,6 +102,9 @@ setImmediate(async function bootstrap() {
 
         config = Container.get<IConfigService>(ConfigServiceId);
         config.initialize(`${__dirname}/config`);
+
+        base = Container.get<IBase>(BaseId);
+        //base.initialize();
 
         logger = Container.get<ILogService>(LogServiceId);
         logger.initialize();

@@ -1,13 +1,12 @@
-
 import { IDataBaseMySqlService, DatabaseServiceId } from './../../services/database/interface';
 import * as Boom from "boom";
 import * as hapi from "hapi";
 import * as decorators from "./decorators";
-import { Base } from './base';
 
 import { inject, injectable } from "inversify";
 
 import { ILogService, LogServiceId } from "../../services/log/interface";
+import { Base } from './../../base/implementations';
 
 export type RouteConfig =
     hapi.RouteAdditionalConfigurationOptions |
